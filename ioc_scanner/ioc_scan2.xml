@@ -25,11 +25,11 @@
       <input type="checkbox" token="IDX" searchWhenChanged="false">
         <label>Indexes</label>
         <search>
-          <query>| inputlookup tso-indexes.csv | sort title</query>
+          <query>| inputlookup list-of-indexes.csv | sort title</query>
         </search>
         <fieldForLabel>title</fieldForLabel>
         <fieldForValue>title</fieldForValue>
-        <default>sec_audit,sec_cb,sec_df,sec_eva,sec_fe,sec_heimdall,sec_ident,sec_ids,sec_mas,sec_pov,sec_sss,sec_tmp1,sec_wsa,skala,skala_eu,skala_dns,skala_ex,skala_fw,tsoc_snort</default>
+        <default>mail,network,firewall</default>
         <delimiter>,</delimiter>
       </input>
     </panel>
