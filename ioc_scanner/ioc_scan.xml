@@ -25,7 +25,7 @@
       <input type="checkbox" token="IDX" searchWhenChanged="false">
         <label>Indexes</label>
         <search>
-          <query>| inputlookup list-of-indexes.csv | sort title</query>
+          <query>|rest /services/data/indexes | dedup title | fields title</query>
         </search>
         <fieldForLabel>title</fieldForLabel>
         <fieldForValue>title</fieldForValue>
