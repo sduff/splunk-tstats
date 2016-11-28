@@ -17,6 +17,13 @@ How to tell if the IOC is in any of your logs without searching in every index f
 - Create a Dashboard that only search those combinations for the IOC.
   - ioc_scan.xml
 
+
+If you want to be able to search all indexes, the dropdown menu in the IOC-scan have a checkbox to select all indexes. When the amount of indexes is growing too large, this can be filtered by generating a list of indexes that should be searchable. The dashboard input should be:
+
+```
+<query>| inputlookup list-of-indexes.csv | sort title</query>
+```
+
 With a very large Splunk platform, this is a time saver!
 
 The idea was developed by Alex Teixeira, Splunk Professional Services.
