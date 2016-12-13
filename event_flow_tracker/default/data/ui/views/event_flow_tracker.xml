@@ -198,10 +198,10 @@
         <title>The moving average line should be kept steady</title>
         <search>
           <query>| tstats local=f prestats=f count WHERE index=$index_token$ BY _indextime, _time span=1s
-			| eval th=3600
-			| eval diff=abs(_indextime-_time)
-			| eval high=if(diff&gt;th,count,0)
-			| timechart span=1h cont=t sum(high) AS count | fillnull value=0 count | trendline sma24(count) AS "Moving_Average(24h)"| rename count AS "Clock skewed (&gt;1h, &lt;-1h)"</query>
+            | eval th=3600
+            | eval diff=abs(_indextime-_time)
+            | eval high=if(diff&gt;th,count,0)
+            | timechart span=1h cont=t sum(high) AS count | fillnull value=0 count | trendline sma24(count) AS "Moving_Average(24h)"| rename count AS "Clock skewed (&gt;1h, &lt;-1h)"</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
         </search>
@@ -240,10 +240,10 @@
         <title>The median time should be kept steady and below the threshold</title>
         <search>
           <query>| tstats local=f prestats=f count WHERE index=$index_token$ BY _indextime, _time span=1s
-		| eval diff=_indextime-_time
-		| fields - count
-		| timechart span=1h cont=t avg(diff) AS "Average", median(diff) As "Median" | eval th=3600
-		| rename th AS "Threshold(1h)"</query>
+        | eval diff=_indextime-_time
+        | fields - count
+        | timechart span=1h cont=t avg(diff) AS "Average", median(diff) As "Median" | eval th=3600
+        | rename th AS "Threshold(1h)"</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
         </search>
@@ -283,7 +283,7 @@
       <table>
         <title>The number of days mising displays the the difference between the current date and the last time an event was seen</title>
         <search>
-          <query>| tstats local=f prestats=f count AS Events WHERE index=$index_token$ earliest=$time_token.earliest$ latest=$time_token.latest$ BY host, _time | rex field=host "(?&lt;domain&gt;[^\\\]+)"  | stats sum(Events) as Events, dc(host) AS Hosts, max(_time) as _time by domain    | eval miss = round((now() - _time)/86400)       | convert ctime(_time) timeformat="%Y-%m-%d %H:%M:%S" | sort - Events | eval Events=case(Events&gt;1000000000000, "More than a Quadrillion! \m/", Events&gt;1000000000, round(Events/1000000000)."T", Events&gt;1000000000, round(Events/1000000000)."B", Events&gt;1000000, round(Events/1000000)."M", Events&gt;1000, round(Events/1000)."K", 1=1, Events) | rename _time -&gt; "Last seen", domain -&gt; "Domain/Host", miss AS "Days Missing"</query>
+          <query>| tstats local=f prestats=f count AS Events WHERE index=$index_token$ earliest=$time_token.earliest$ latest=$time_token.latest$ BY host, _time | rex field=host "(?&lt;domain&gt;[^\\\]+)"  | stats sum(Events) as Events, max(_time) as _time by domain    | eval miss = floor((now() - _time)/86400)       | convert ctime(_time) timeformat="%Y-%m-%d %H:%M:%S" | sort - Events | eval Events=case(Events&gt;1000000000000, "More than a Quadrillion! \m/", Events&gt;1000000000, round(Events/1000000000)."T", Events&gt;1000000000, round(Events/1000000000)."B", Events&gt;1000000, round(Events/1000000)."M", Events&gt;1000, round(Events/1000)."K", 1=1, Events) | rename _time -&gt; "Last seen", domain -&gt; "Host", miss AS "Days Missing"</query>
           <earliest>$time_token.earliest$</earliest>
           <latest>$time_token.latest$</latest>
         </search>
@@ -296,3 +296,4 @@
     </panel>
   </row>
 </form>
+
